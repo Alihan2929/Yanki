@@ -1,0 +1,229 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Layout.master.cs" Inherits="Yankı.Layout" %>
+<!DOCTYPE html>
+<html lang="tr">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yankı - Sosyal Ağ</title>
+    
+    <style>
+        :root {
+            --primary-color: #1d9bf0;
+            --primary-hover: #1a8cd8;
+            --bg-color: #f7f9f9;
+            --card-bg: #ffffff;
+            --text-main: #0f1419;
+            --text-secondary: #536471;
+            --border-color: #eff3f4;
+            --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Modern Cam Efektli Üst Menü */
+        header {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Modern Yankı Logosu */
+        .yankı-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .yankı-logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-emblem {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0f1419 0%, var(--primary-color) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.25);
+            position: relative;
+        }
+
+        .echo-ring {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .echo-ring-inner {
+            width: 8px;
+            height: 8px;
+            background-color: #ffffff;
+            border-radius: 50%;
+        }
+
+        .logo-typography {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.6px;
+            line-height: 1.1;
+        }
+
+        .logo-brand-tagline {
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-login {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-login:hover {
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-register {
+            text-decoration: none;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 9px 20px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
+        }
+
+        .btn-register:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* İçerik Kartı Alanı */
+        main {
+            flex: 1;
+            max-width: 1000px;
+            margin: 40px auto;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-color);
+            min-height: 55vh;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: auto;
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        
+        <header>
+            <div class="nav-container">
+                <a href="GirisYap.aspx" class="yankı-logo">
+                    <div class="logo-emblem">
+                        <div class="echo-ring"></div>
+                        <div class="echo-ring-inner"></div>
+                    </div>
+                    <div class="logo-typography">
+                        <span class="logo-brand-name">Yankı</span>
+                        <span class="logo-brand-tagline">Social</span>
+                    </div>
+                </a>
+
+                <div class="nav-links">
+                    <a href="GirisYap.aspx" class="btn-login">Giriş Yap</a>
+                    <a href="KayitOl.aspx" class="btn-register">Kayıt Ol</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="content-card">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </main>
+
+        <footer>
+            &copy; 2026 Yankı Network. Tüm hakları saklıdır.
+        </footer>
+
+    </form>
+</body>
+</html>

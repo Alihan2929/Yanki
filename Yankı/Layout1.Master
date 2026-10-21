@@ -1,0 +1,493 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Layout1.master.cs" Inherits="Yankı.Layout1" %>
+<!DOCTYPE html>
+<html lang="tr">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yankı - Akış</title>
+    
+    <style>
+        :root {
+            --primary-color: #1d9bf0;
+            --primary-hover: #1a8cd8;
+            --bg-color: #f7f9f9;
+            --card-bg: #ffffff;
+            --text-main: #0f1419;
+            --text-secondary: #536471;
+            --border-color: #eff3f4;
+            --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Koyu Tema (Dark Mode) - Estetik Antrasit Gri Paleti */
+        body.dark-mode {
+            --bg-color: #15202b;      
+            --card-bg: #192734;       
+            --text-main: #f7f9f9;     
+            --text-secondary: #8b98b5;
+            --border-color: #38444d;  
+        }
+
+        body.dark-mode header {
+            background-color: rgba(21, 32, 43, 0.85) !important;
+            border-bottom: 1px solid #38444d !important;
+        }
+
+        body.dark-mode .search-input {
+            background-color: #22303c !important;
+            color: #f7f9f9 !important;
+            border: 1px solid #38444d !important;
+        }
+
+        body.dark-mode .search-input:focus {
+            background-color: #15202b !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Cam Efektli Üst Menü */
+        header {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Modern Yankı Logosu */
+        .yankı-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .yankı-logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-emblem {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0f1419 0%, var(--primary-color) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.25);
+            position: relative;
+        }
+
+        .echo-ring {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .echo-ring-inner {
+            width: 8px;
+            height: 8px;
+            background-color: #ffffff;
+            border-radius: 50%;
+        }
+
+        .logo-typography {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.6px;
+            line-height: 1.1;
+        }
+
+        .logo-brand-tagline {
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Modern İşlevsel Arama Çubuğu */
+        .search-box {
+            width: 280px;
+            margin: 0 30px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border-radius: 24px;
+            border: 1px solid transparent;
+            background-color: #eff3f4;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* Sağ Menü Linkleri */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        /* Bildirim Kutusu (Dropdown) ve Badge */
+        .notification-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .notification-trigger {
+            position: relative;
+            user-select: none;
+        }
+
+        .notification-badge {
+            background-color: #f4212e;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--card-bg, #ffffff);
+            box-sizing: border-box;
+            pointer-events: none;
+            box-shadow: 0 2px 6px rgba(244, 33, 46, 0.35);
+            margin-left: 2px;
+            animation: badgePop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body.dark-mode .notification-badge {
+            border-color: #192734;
+        }
+
+        @keyframes badgePop {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .notification-dropdown {
+            display: none; 
+            position: absolute;
+            top: 48px; 
+            right: 0;
+            width: 340px;
+            background-color: var(--card-bg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            z-index: 2000;
+            flex-direction: column;
+            max-height: 420px; 
+            overflow-y: auto;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .notification-dropdown.show {
+            display: flex;
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            font-weight: 800;
+            font-size: 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            background: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .notification-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transition: background-color 0.2s;
+        }
+
+        .notification-item:hover {
+            background-color: var(--bg-color);
+        }
+
+        .noti-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .noti-content {
+            flex: 1;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+        
+        .noti-username {
+            font-weight: 700;
+        }
+
+        .noti-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: block;
+        }
+        
+        .noti-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-accept {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-accept:hover { background-color: var(--primary-hover); }
+
+        .btn-reject {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 5px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-reject:hover { background-color: var(--border-color); color: var(--text-main); }
+        
+        .hidden-lbl { display: none; }
+
+        .btn-logout {
+            text-decoration: none;
+            color: #f4212e;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(244, 33, 46, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #f4212e;
+            color: #ffffff;
+        }
+
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 630px;
+            margin: 24px auto;
+            padding: 0 16px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: auto;
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="<%= BodyClass %>">
+    <form id="form1" runat="server">
+        
+        <header>
+            <div class="nav-container">
+                
+                <a href="AnaSayfa.aspx" class="yankı-logo">
+                    <div class="logo-emblem">
+                        <div class="echo-ring"></div>
+                        <div class="echo-ring-inner"></div>
+                    </div>
+                    <div class="logo-typography">
+                        <span class="logo-brand-name">Yankı</span>
+                        <span class="logo-brand-tagline">Social</span>
+                    </div>
+                </a>
+                
+                <!-- İşlevsel Arama Kutusu (TextBox) -->
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <asp:TextBox ID="txtSearch" runat="server" CssClass="search-input" placeholder="Yankı'da ara..." OnTextChanged="txtSearch_TextChanged" AutoPostBack="true"></asp:TextBox>
+                </div>
+
+                <div class="nav-links">
+                    <a href="AnaSayfa.aspx" class="nav-item">🏠 Ana Sayfa</a>
+                    <a href="Mesajlar.aspx" class="nav-item">💬 Mesajlar</a>
+                    
+                    <div class="notification-wrapper">
+                        <a href="javascript:void(0);" class="nav-item notification-trigger" id="btnBildirimler" onclick="toggleNotifications()">
+                            🔔 Bildirimler
+                            
+                            <!-- BİLDİRİM SAYACI DATALIST'İ -->
+                            <asp:DataList ID="DataListSayac" runat="server" RepeatLayout="Flow">
+                                <ItemTemplate>
+                                    <span class="notification-badge"><%# Eval("Sayi") %></span>
+                                </ItemTemplate>
+                            </asp:DataList>
+                        </a>
+                        
+                        <div class="notification-dropdown" id="notificationBox">
+                            <div class="dropdown-header">Bildirimler</div>
+                            
+                            <asp:DataList ID="DataList1" runat="server" RepeatLayout="Flow" Width="100%">
+                                <ItemTemplate>
+                                    <div class="notification-item">
+                                        <img src='<%# Eval("ProfileImage") %>' class="noti-avatar" alt="Avatar" onerror="this.src='https://ui-avatars.com/api/?name=User&background=cfd9de'" />
+                                        
+                                        <div class="noti-content">
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("Username") %>' CssClass="noti-username"></asp:Label>
+                                            <asp:Label ID="Label4" runat="server" Text='<%# Eval("Message") %>'></asp:Label>
+                                            
+                                            <span class="noti-time">
+                                                <asp:Label ID="Label3" runat="server" Text='<%# Eval("CreatedAt") %>'></asp:Label>
+                                            </span>
+                                            
+                                            <div class="noti-actions">
+                                                <asp:Button ID="Button2" runat="server" Text="Kabul Et" CssClass="btn-accept" CommandArgument='<%# Eval("FollowID") %>' OnClick="IstekKabulClick" />
+                                                <asp:Button ID="Button1" runat="server" Text="Reddet" CssClass="btn-reject" CommandArgument='<%# Eval("FollowID") %>' OnClick="IstekReddetClick" />
+                                            </div>
+                                            
+                                            <asp:Label ID="Label2" runat="server" Text='<%# Eval("ProfileImage") %>' CssClass="hidden-lbl"></asp:Label>
+                                        </div>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:DataList>
+                        </div>
+                    </div>
+
+                    <a href="Profile.aspx" class="nav-item">👤 Profil</a>
+                    <a href="GirisYap.aspx" class="btn-logout">Çıkış</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </main>
+
+    </form>
+
+    <script>
+        function toggleNotifications() {
+            var box = document.getElementById("notificationBox");
+            box.classList.toggle("show");
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.closest('#btnBildirimler') && !event.target.closest('.notification-dropdown')) {
+                var box = document.getElementById("notificationBox");
+                if (box && box.classList.contains('show')) {
+                    box.classList.remove('show');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
