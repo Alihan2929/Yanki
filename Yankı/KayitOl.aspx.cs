@@ -77,7 +77,9 @@ namespace Yankı
             }
             catch (Exception ex)
             {
-                lblMesaj.Text = "Kayıt başarısız oldu. Hata Detayı: " + ex.Message;
+                SqlBaglanti.baglan.Close();
+                // Teknik hata detayını kullanıcıya gösterme (aynı e-posta/kullanıcı adı gibi durumlar dahil)
+                lblMesaj.Text = "Kayıt başarısız oldu. Bilgileri kontrol edip tekrar deneyin.";
                 lblMesaj.CssClass = "alert-box alert-error";
                 lblMesaj.Visible = true;
             }

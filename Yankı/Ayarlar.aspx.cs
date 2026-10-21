@@ -12,24 +12,33 @@ namespace Yankı
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // Giriş yapmamış kullanıcı ayarlara erişemesin
+            if (Session["id"] == null)
+            {
+                Response.Redirect("GirisYap.aspx");
+                return;
+            }
         }
 
         protected void btnSaveHesap_Click(object sender, EventArgs e)
         {
+            // Dosya seçilmediyse profil resmini boşaltmak yerine hiçbir şey yapma
+            if (!fileProfileImage.HasFile)
+            {
+                Response.Redirect("Profile.aspx");
+                return;
+            }
+
+            string image = Yardimci.ResimKaydet(fileProfileImage, Server);
+            if (image == null)
+            {
+                // Geçersiz uzantı veya 5 MB üstü dosya
+                return;
+            }
+
             SqlBaglanti.BaglantiKontrol();
 
             int id = Convert.ToInt32(Session["id"]);
-            string image = "";
-            if (fileProfileImage.HasFile)
-            {
-                string benzersizIsim = Guid.NewGuid().ToString() + "_" + fileProfileImage.FileName;
-
-                image = "Images/" + benzersizIsim;
-
-                string fizikselYol = Server.MapPath("~/Images/" + benzersizIsim);
-                fileProfileImage.SaveAs(fizikselYol);
-            }
 
             SqlCommand komut = new SqlCommand(
                 "UPDATE Users_db SET ProfileImage=@pimage WHERE id=@pid",
@@ -45,10 +54,15 @@ namespace Yankı
         }
         protected void btnSaveSifre_Click(object sender, EventArgs e)
         {
+            string sifre = txtPassword.Text;
+
+            // Boş veya çok kısa şifreyi kabul etme
+            if (string.IsNullOrWhiteSpace(sifre) || sifre.Length < 6)
+                return;
+
             SqlBaglanti.BaglantiKontrol();
 
             int id = Convert.ToInt32(Session["id"]);
-            string sifre = txtPassword.Text;
             string hashsifre = Crypt.CryptSifre(sifre);
             SqlCommand komut = new SqlCommand("UPDATE Users_db set PasswordHash=@psifre where id = @pid", SqlBaglanti.baglan);
             komut.Parameters.AddWithValue("@psifre", hashsifre);

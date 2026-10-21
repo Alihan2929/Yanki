@@ -111,14 +111,29 @@ namespace Yankı
         {
             SqlBaglanti.BaglantiKontrol();
             int id = Convert.ToInt32(((Button)sender).CommandArgument);
+            int kullaniciID = Convert.ToInt32(Session["id"]);
 
-            SqlCommand komut2 = new SqlCommand("DELETE FROM Comments_db WHERE PostID = @pid",SqlBaglanti.baglan);
+            // Sadece kendi gönderisini silebilsin; bağlı yorum, beğeni ve repost kayıtlarını da temizle
+            string sahiplik = "(SELECT id FROM Posts_db WHERE id = @pid AND UserID = @puser)";
 
+            SqlCommand komut2 = new SqlCommand("DELETE FROM Comments_db WHERE PostID IN " + sahiplik, SqlBaglanti.baglan);
             komut2.Parameters.AddWithValue("@pid", id);
+            komut2.Parameters.AddWithValue("@puser", kullaniciID);
             komut2.ExecuteNonQuery();
 
-            SqlCommand komut = new SqlCommand("DELETE FROM Posts_db WHERE id = @pid ", SqlBaglanti.baglan);
+            SqlCommand komut3 = new SqlCommand("DELETE FROM Likes_db WHERE PostsID IN " + sahiplik, SqlBaglanti.baglan);
+            komut3.Parameters.AddWithValue("@pid", id);
+            komut3.Parameters.AddWithValue("@puser", kullaniciID);
+            komut3.ExecuteNonQuery();
+
+            SqlCommand komut4 = new SqlCommand("DELETE FROM Reposts_db WHERE PostID IN " + sahiplik, SqlBaglanti.baglan);
+            komut4.Parameters.AddWithValue("@pid", id);
+            komut4.Parameters.AddWithValue("@puser", kullaniciID);
+            komut4.ExecuteNonQuery();
+
+            SqlCommand komut = new SqlCommand("DELETE FROM Posts_db WHERE id = @pid AND UserID = @puser", SqlBaglanti.baglan);
             komut.Parameters.AddWithValue("@pid", id);
+            komut.Parameters.AddWithValue("@puser", kullaniciID);
             komut.ExecuteNonQuery();
             SqlBaglanti.baglan.Close();
 
@@ -140,11 +155,12 @@ namespace Yankı
             string content = txtEditContent.Text;
 
             SqlCommand komut = new SqlCommand(
-                "UPDATE Posts_db SET Content=@content WHERE id=@pid",
+                "UPDATE Posts_db SET Content=@content WHERE id=@pid AND UserID=@puser",
                 SqlBaglanti.baglan);
 
             komut.Parameters.AddWithValue("@content", content);
             komut.Parameters.AddWithValue("@pid", id);
+            komut.Parameters.AddWithValue("@puser", Convert.ToInt32(Session["id"]));
 
             komut.ExecuteNonQuery();
             SqlBaglanti.baglan.Close();

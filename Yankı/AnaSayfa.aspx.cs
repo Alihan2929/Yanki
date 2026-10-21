@@ -50,15 +50,16 @@ namespace Yankı
             if (string.IsNullOrEmpty(gonderi) && !filePostMedia.HasFile)
                 return;
 
-            SqlBaglanti.BaglantiKontrol();
-
             if (filePostMedia.HasFile)
             {
-                string benzersizIsim = Guid.NewGuid().ToString() + "_" + filePostMedia.FileName;
-                media = "Images/" + benzersizIsim;
-                string fizikselYol = Server.MapPath("~/Images/" + benzersizIsim);
-                filePostMedia.SaveAs(fizikselYol);
+                media = Yardimci.ResimKaydet(filePostMedia, Server);
+
+                // Geçersiz uzantı veya 5 MB üstü dosya: gönderiyi paylaşma
+                if (media == null)
+                    return;
             }
+
+            SqlBaglanti.BaglantiKontrol();
 
             // Eğer medya (MediaUrl) varsa PostType = 2, yoksa PostType = 1 yapılır
             int postType = !string.IsNullOrEmpty(media) ? 2 : 1;

@@ -8,11 +8,9 @@ namespace Yankı
 {
     public class SqlBaglanti
     {
+        // Bağlantı bilgisi artık Web.config içindeki "YankiDB" kaydından okunuyor
         public static SqlConnection baglan = new SqlConnection(
-    @"Data Source=DESKTOP-B5V6MH4\SQLEXPRESS;
-      Initial Catalog=Yankı_db;
-      Integrated Security=True;
-      TrustServerCertificate=True");
+            System.Configuration.ConfigurationManager.ConnectionStrings["YankiDB"].ConnectionString);
 
         public static void BaglantiKontrol()
         {
